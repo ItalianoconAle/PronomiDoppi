@@ -76,7 +76,7 @@
   function loadQuestion() {
     nextBtn.style.display = "none";
     const current = quizData[currentQuestion];
-    questionEl.textContent = current.question;
+    questionEl.innerHTML = current.question;
     optionsEl.innerHTML = "";
 
     current.options.forEach((opt, index) => {
