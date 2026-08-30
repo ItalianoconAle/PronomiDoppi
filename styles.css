@@ -123,3 +123,14 @@ body {
   color: #404040;
   margin-top: 0;
 }
+
+.feedback-msg {
+  color: #d32f2f;
+  background-color: #fdeded;
+  border: 1px solid #f5c2c2;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
