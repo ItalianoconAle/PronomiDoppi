@@ -31,7 +31,7 @@ body {
 /* Instructions Banner */
 .instructions-box {
   background-color: #f8faf9;
-  border-left: 4px solid ##65c7c3;
+  border-left: 4px solid #58be8d;
   padding: 14px 18px;
   border-radius: 8px;
   margin-bottom: 24px;
@@ -82,14 +82,14 @@ body {
 }
 
 .option-btn:hover:not(:disabled) {
-  border-color: #65c7c3;
+  border-color: #58be8d;
   background-color: #f4faf7;
 }
 
 /* Selection Feedback */
 .option-btn.correct {
-  background-color: #65c7c3;
-  border-color: #65c7c3;
+  background-color: #58be8d;
+  border-color: #58be8d;
   color: #ffffff;
   font-weight: 600;
 }
