@@ -1,0 +1,22 @@
+.instructions-box {
+  background-color: #ffffff;
+  border-left: 4px solid #58be8d;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.instructions-box h3 {
+  margin: 0 0 6px 0;
+  font-size: 1rem;
+  color: #0070f3;
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+
+.instructions-box p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.4;
+}
