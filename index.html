@@ -76,6 +76,7 @@
   const resultContainer = document.getElementById("result-container");
   const scoreText = document.getElementById("score-text");
   const feedbackMsg = document.getElementById("feedback-msg");
+  const instructionsBox = document.querySelector(".instructions-box");
 
   function loadQuestion() {
     attempts = 0;
@@ -152,9 +153,11 @@
 
   nextBtn.addEventListener("click", handleNextStep);
 
-  function showResults() {
+function showResults() {
     quizEl.style.display = "none";
+    if (instructionsBox) instructionsBox.style.display = "none"; // Hides instructions
     resultContainer.style.display = "block";
+    
     const percentage = Math.round((score / quizData.length) * 100);
     scoreText.textContent = `Punteggio finale: ${score} su ${quizData.length} (${percentage}%)`;
   }
