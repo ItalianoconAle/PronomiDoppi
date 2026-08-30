@@ -26,7 +26,9 @@
     <button onclick="location.reload()" class="btn">Ricomincia il quiz</button>
   </div>
 </div>
+<div id="feedback-msg" class="feedback-msg" style="display: none;"></div>
 
+<div id="options" class="options-container"></div>
 <script>
   const quizData = [
     {
@@ -74,55 +76,76 @@
   const scoreText = document.getElementById("score-text");
 
 function loadQuestion() {
+    attempts = 0;
+    missedFirstTry = false;
     nextBtn.style.display = "none";
+    if (feedbackMsg) feedbackMsg.style.display = "none";
+
     const current = quizData[currentQuestion];
-    
-    // Renders HTML formatting (like <u> or <b>) in the question text
     questionEl.innerHTML = current.question;
-    
     optionsEl.innerHTML = "";
 
     current.options.forEach((opt, index) => {
       const button = document.createElement("button");
-      
-      // Renders HTML formatting if you put tags inside the choices
       button.innerHTML = opt;
-      
       button.classList.add("option-btn");
       button.addEventListener("click", () => selectOption(index, button));
       optionsEl.appendChild(button);
     });
   }
 function selectOption(selectedIndex, selectedBtn) {
+    attempts++;
     const correctIndex = quizData[currentQuestion].answer;
+    const isCorrect = selectedIndex === correctIndex;
     const buttons = optionsEl.querySelectorAll(".option-btn");
 
-    // Disable all options once a choice is made
-    buttons.forEach((btn, idx) => {
-      btn.disabled = true;
-      if (idx === correctIndex) btn.classList.add("correct");
-    });
-
-    const isCorrect = selectedIndex === correctIndex;
-
     if (isCorrect) {
-      score++;
-      // Auto-advance after 800 milliseconds on correct answer
+      // Award point ONLY if they got it right on the very first try
+      if (!missedFirstTry) {
+        score++;
+      }
+
+      // Highlight correct choice in green and disable remaining options
+      selectedBtn.classList.add("correct");
+      buttons.forEach(btn => btn.disabled = true);
+      if (feedbackMsg) feedbackMsg.style.display = "none";
+
+      // Auto-advance after 800ms
       setTimeout(() => {
         handleNextStep();
       }, 800);
+
     } else {
+      // Incorrect Answer
       selectedBtn.classList.add("incorrect");
-      // Keep manual button for wrong answers so user can review
-      if (currentQuestion < quizData.length - 1) {
-        nextBtn.style.display = "block";
+      selectedBtn.disabled = true; // Disable only the wrong button chosen
+
+      if (attempts === 1) {
+        // FIRST ATTEMPT WRONG: Give a second chance
+        missedFirstTry = true;
+        if (feedbackMsg) {
+          feedbackMsg.textContent = "Sbagliato! Riprova.";
+          feedbackMsg.style.display = "block";
+        }
       } else {
-        setTimeout(showResults, 1500);
+        // SECOND ATTEMPT WRONG: Reveal correct answer & disable all
+        if (feedbackMsg) feedbackMsg.style.display = "none";
+        buttons.forEach((btn, idx) => {
+          btn.disabled = true;
+          if (idx === correctIndex) btn.classList.add("correct");
+        });
+
+        // Show manual next button or transition to results
+        if (currentQuestion < quizData.length - 1) {
+          nextBtn.style.display = "block";
+        } else {
+          setTimeout(showResults, 1500);
+        }
       }
     }
   }
 
-  function handleNextStep() {
+function handleNextStep() {
     if (currentQuestion < quizData.length - 1) {
       currentQuestion++;
       loadQuestion();
@@ -131,7 +154,7 @@ function selectOption(selectedIndex, selectedBtn) {
     }
   }
 
- nextBtn.addEventListener("click", handleNextStep);
+  nextBtn.addEventListener("click", handleNextStep);
 
 function showResults() {
     quizEl.style.display = "none";
