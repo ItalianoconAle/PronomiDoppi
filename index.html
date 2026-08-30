@@ -88,32 +88,45 @@
     });
   }
 
-  function selectOption(selectedIndex, selectedBtn) {
+function selectOption(selectedIndex, selectedBtn) {
     const correctIndex = quizData[currentQuestion].answer;
     const buttons = optionsEl.querySelectorAll(".option-btn");
 
+    // Disable all options once a choice is made
     buttons.forEach((btn, idx) => {
       btn.disabled = true;
       if (idx === correctIndex) btn.classList.add("correct");
     });
 
-    if (selectedIndex === correctIndex) {
+    const isCorrect = selectedIndex === correctIndex;
+
+    if (isCorrect) {
       score++;
+      // Auto-advance after 800 milliseconds on correct answer
+      setTimeout(() => {
+        handleNextStep();
+      }, 800);
     } else {
       selectedBtn.classList.add("incorrect");
-    }
-
-    if (currentQuestion < quizData.length - 1) {
-      nextBtn.style.display = "block";
-    } else {
-      setTimeout(showResults, 1200);
+      // Keep manual button for wrong answers so user can review
+      if (currentQuestion < quizData.length - 1) {
+        nextBtn.style.display = "block";
+      } else {
+        setTimeout(showResults, 1500);
+      }
     }
   }
 
-  nextBtn.addEventListener("click", () => {
-    currentQuestion++;
-    loadQuestion();
-  });
+  function handleNextStep() {
+    if (currentQuestion < quizData.length - 1) {
+      currentQuestion++;
+      loadQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+ nextBtn.addEventListener("click", handleNextStep);
 
   function showResults() {
     quizEl.style.display = "none";
