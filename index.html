@@ -73,21 +73,26 @@
   const resultContainer = document.getElementById("result-container");
   const scoreText = document.getElementById("score-text");
 
-  function loadQuestion() {
+function loadQuestion() {
     nextBtn.style.display = "none";
     const current = quizData[currentQuestion];
+    
+    // Renders HTML formatting (like <u> or <b>) in the question text
     questionEl.innerHTML = current.question;
+    
     optionsEl.innerHTML = "";
 
     current.options.forEach((opt, index) => {
       const button = document.createElement("button");
-      button.textContent = opt;
+      
+      // Renders HTML formatting if you put tags inside the choices
+      button.innerHTML = opt;
+      
       button.classList.add("option-btn");
       button.addEventListener("click", () => selectOption(index, button));
       optionsEl.appendChild(button);
     });
   }
-
 function selectOption(selectedIndex, selectedBtn) {
     const correctIndex = quizData[currentQuestion].answer;
     const buttons = optionsEl.querySelectorAll(".option-btn");
