@@ -145,5 +145,23 @@ function showResults() {
 
   loadQuestion();
 </script>
+  <script>
+  function sendHeight() {
+    // Measure full scroll height of the quiz container
+    const height = document.body.scrollHeight;
+    // Send height to parent window (Weebly)
+    window.parent.postMessage({ quizHeight: height }, '*');
+  }
+
+  // Send height on initial load
+  window.addEventListener('load', sendHeight);
+
+  // Send height whenever window resizes (e.g., orientation change)
+  window.addEventListener('resize', sendHeight);
+
+  // Send height whenever a new question loads or results show
+  const observer = new MutationObserver(sendHeight);
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+</script>
 </body>
 </html>
