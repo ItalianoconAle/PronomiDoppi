@@ -133,10 +133,14 @@ function selectOption(selectedIndex, selectedBtn) {
 
  nextBtn.addEventListener("click", handleNextStep);
 
-  function showResults() {
+function showResults() {
     quizEl.style.display = "none";
     resultContainer.style.display = "block";
-    scoreText.textContent = `Hai ottenuto ${score} su ${quizData.length} punti!`;
+    
+    // Calculate percentage and round to nearest whole number
+    const percentage = Math.round((score / quizData.length) * 100);
+    
+    scoreText.textContent = `Punteggio finale: ${score} su ${quizData.length} (${percentage}%)`;
   }
 
   loadQuestion();
