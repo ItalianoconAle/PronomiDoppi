@@ -2,11 +2,6 @@
   box-sizing: border-box;
 }
 
-/* Ensure buttons are easy to tap on phones */
-.option-btn {
-  min-height: 48px; /* Minimum recommended touch target size */
-}
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: transparent;
@@ -53,6 +48,23 @@ body {
   line-height: 1.5;
 }
 
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  height: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #58be8d !important;
+  transition: width 0.3s ease;
+}
+
 /* Question & Options */
 .question {
   font-size: 1.2rem;
@@ -79,11 +91,23 @@ body {
   text-align: left;
   font-weight: 500;
   transition: all 0.2s ease;
+  min-height: 48px; /* Touch target minimum size */
+
+  /* Prevent iOS blue tap highlight and persistent focus outlines */
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
-.option-btn:hover:not(:disabled) {
-  border-color: #58be8d;
-  background-color: #f4faf7;
+/* ONLY apply hover styling on mouse-driven devices (Desktops/Laptops) */
+@media (hover: hover) {
+  .option-btn:hover:not(:disabled) {
+    border-color: #58be8d;
+    background-color: #f4faf7;
+  }
+
+  .btn:hover {
+    opacity: 0.9;
+  }
 }
 
 /* Selection Feedback */
@@ -100,7 +124,29 @@ body {
   color: #d32f2f;
 }
 
-/* Navigation Button */
+/* Feedback Messages */
+.feedback-msg {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 16px;
+  display: none;
+}
+
+.feedback-msg.correct {
+  color: #2e7d32 !important;
+  background-color: #e8f5e9 !important;
+  border: 1px solid #c8e6c9;
+}
+
+.feedback-msg.incorrect {
+  color: #d32f2f !important;
+  background-color: #fdeded !important;
+  border: 1px solid #f5c2c2;
+}
+
+/* Navigation & Action Buttons */
 .btn {
   margin-top: 24px;
   padding: 14px;
@@ -113,40 +159,10 @@ body {
   border-radius: 10px;
   cursor: pointer;
   transition: opacity 0.2s ease;
-}
-
-.btn:hover {
-  opacity: 0.9;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #result-container h2 {
   color: #404040;
   margin-top: 0;
-}
-
-.feedback-msg {
-  color: #d32f2f;
-  background-color: #fdeded;
-  border: 1px solid #f5c2c2;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-
-.progress-container {
-  width: 100%;
-  background-color: #e0e0e0;
-  border-radius: 8px;
-  height: 10px;
-  margin-bottom: 20px;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background-color: #58be8d; /* Adjust color to match your theme */
-  transition: width 0.3s ease;
 }
