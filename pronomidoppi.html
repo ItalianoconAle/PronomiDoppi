@@ -91,6 +91,10 @@
   }
 
   function loadQuestion() {
+    // Drop browser focus from the previously clicked button
+    if (document.activeElement) {
+      document.activeElement.blur();
+    }
     attempts = 0;
     missedFirstTry = false;
     nextBtn.style.display = "none";
@@ -109,6 +113,8 @@
       button.addEventListener("click", () => selectOption(index, button));
       optionsEl.appendChild(button);
     });
+
+    sendHeight();
   }
 
   function selectOption(selectedIndex, selectedBtn) {
@@ -126,6 +132,8 @@
       buttons.forEach(btn => btn.disabled = true);
       if (feedbackMsg) feedbackMsg.style.display = "none";
 
+      sendHeight();
+
       setTimeout(() => {
         handleNextStep();
       }, 800);
@@ -140,6 +148,7 @@
           feedbackMsg.textContent = "Sbagliato! Riprova.";
           feedbackMsg.style.display = "block";
         }
+        sendHeight();
       } else {
         if (feedbackMsg) feedbackMsg.style.display = "none";
         buttons.forEach((btn, idx) => {
@@ -152,6 +161,7 @@
         } else {
           setTimeout(showResults, 1500);
         }
+        sendHeight();
       }
     }
   }
@@ -176,6 +186,8 @@
     const percentage = Math.round((score / quizData.length) * 100);
     scoreText.textContent = `Punteggio finale: ${score} su ${quizData.length} (${percentage}%)`;
 
+    sendHeight();
+
     if (GOOGLE_SCRIPT_URL) {
       fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
@@ -193,11 +205,18 @@
 
   // Initialize the quiz
   loadQuestion();
-</script>
 
-<script>
+  // iFrame Resizer Communication
   function sendHeight() {
-    const height = document.body.scrollHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const height = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
     window.parent.postMessage({ quizHeight: height }, '*');
   }
 
@@ -205,7 +224,12 @@
   window.addEventListener('resize', sendHeight);
 
   const observer = new MutationObserver(sendHeight);
-  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+  observer.observe(document.body, { 
+    childList: true, 
+    subtree: true, 
+    attributes: true, 
+    attributeFilter: ['style', 'class'] 
+  });
 </script>
 
 </body>
